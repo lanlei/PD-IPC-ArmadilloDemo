@@ -1,0 +1,394 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{B12702AD-ABFB-343A-A199-8E24837244A3}</ProjectGuid>
+    <Keyword>QtVS_v304</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <QtMsBuild Condition="'$(QtMsBuild)'=='' or !Exists('$(QtMsBuild)\qt.targets')">$(MSBuildProjectDirectory)\QtMsBuild</QtMsBuild>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <UseIntelMKL>Parallel</UseIntelMKL>
+    <UseIntelTBB>true</UseIntelTBB>
+    <UseInteloneTBB>true</UseInteloneTBB>
+    <UseInteloneMKL>Parallel</UseInteloneMKL>
+    <UseILP64Interfaces1A>false</UseILP64Interfaces1A>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <UseIntelMKL>Parallel</UseIntelMKL>
+    <UseIntelTBB>true</UseIntelTBB>
+    <UseILP64Interfaces>false</UseILP64Interfaces>
+    <UseInteloneTBB>true</UseInteloneTBB>
+    <UseInteloneMKL>Parallel</UseInteloneMKL>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
+    <Message Importance="High" Text="QtMsBuild: could not locate qt.targets, qt.props; project may not build correctly." />
+  </Target>
+  <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 11.6.props" />
+  </ImportGroup>
+  <ImportGroup Label="Shared" />
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')">
+    <Import Project="$(QtMsBuild)\qt_defaults.props" />
+  </ImportGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IncludePath>$(BOOST_INCLUDE_DIR);$(TBB_INCLUDE);C:\ThridParty\cxxopts\include;C:\ThridParty\partio\src\lib;.\external\qucsdk\include;$(QGLVIEWER_INCLUDE);$(EIGEN_INCLUDE);$(FREETYPE_INCLUDE);$(CUDA_PATH)\include;$(NVCUDASAMPLES_ROOT)\common\inc\;$(QUCSDK_INCLUDE);$(MKL_PATH)\include;C:\ThridParty\libigl\include;C:\Source Code\ipc-toolkit;C:\ThridParty\fmt\include;C:\ThridParty\spdlog\include;C:\ThridParty\Tight-Inclusion;C:\ThridParty\robin-map\include;C:\ThridParty\SimpleBVH\src;C:\ThridParty\cli11\include;C:\ThridParty\libigl\external;C:\ThridParty\filib\filib;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\ThridParty\SuiteSparse\suitesparse\build\lib\Release;C:\ThridParty\tbb\build\Release;$(TBB_LIBRARY);C:\ThridParty\boost\boost\stage\lib;.\external\qucsdk\;$(LIB_RELEASE);$(CUDA_PATH)\lib\x64;$(MKL_PATH)\lib\intel64;C:\Program Files (x86)\IntelSWTools\compilers_and_libraries_2020.1.216\windows\compiler\lib\intel64_win;C:\Source Code\ipc-toolkit\ipc-toolkit\x64\Release;C:\ThridParty\libigl\build\Release;C:\ThridParty\fmt\build\Release;C:\ThridParty\SimpleBVH\build\Release;C:\ThridParty\spdlog\build\Release;C:\ThridParty\Tight-Inclusion\build\Release;C:\ThridParty\filib\build\Release;$(LibraryPath)</LibraryPath>
+    <ExecutablePath>C:\Program Files %28x86%29\Intel\oneAPI\mkl\2021.3.0\redist\intel64;$(ExecutablePath)</ExecutablePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IncludePath>$(JASONCPP_INCLUDE);.\;$(QT_INCLUDE);.\external\qucsdk\include;$(BOOST_INCLUDE_DIR);$(TBB_INCLUDE);$(THRID_PARTY)\cxxopts\include;$(THRID_PARTY)\partio\src\lib;$(QGLVIEWER_INCLUDE);$(EIGEN_INCLUDE);$(FREETYPE_INCLUDE);$(CUDA_PATH)\include;$(NVCUDASAMPLES_ROOT)\common\inc\;$(QUCSDK_INCLUDE);$(MKL_PATH)\include;$(THRID_PARTY)\libigl\include;$(IPC_TOOLKIT);$(THRID_PARTY)\fmt\include;$(THRID_PARTY)\spdlog\include;$(THRID_PARTY)\Tight-Inclusion;$(THRID_PARTY)\robin-map\include;$(THRID_PARTY)\SimpleBVH\src;$(THRID_PARTY)\cli11\include;$(THRID_PARTY)\libigl\external;$(THRID_PARTY)\filib\filib;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\ThridParty\tbb\build\Release;C:\ThridParty\Libs\Debug;$(TBB_LIBRARY);$(THRID_PARTY)\tbb\build\Debug;$(THRID_PARTY)\SuiteSparse\suitesparse\build\lib\Debug;$(TBB_LIBRARY_DEBUG);$(BOOST_ROOT)\stage\lib;.\external\qucsdk\;$(LIB_Debug);$(CUDA_PATH)\lib\x64;C:\Source Code\ipc-toolkit\ipc-toolkit\x64\Debug;$(MKL_PATH)\lib;C:\ThridParty\libigl\build\Debug;C:\ThridParty\fmt\build\Debug;C:\ThridParty\SimpleBVH\build\Debug;C:\ThridParty\spdlog\build\Debug;C:\ThridParty\Tight-Inclusion\build\Debug;C:\ThridParty\filib\build\Debug;$(LibraryPath)</LibraryPath>
+    <ExecutablePath>C:\Program Files (x86)\IntelSWTools\compilers_and_libraries_2020.1.216\windows\redist\intel64_win\mkl;$(ExecutablePath)</ExecutablePath>
+  </PropertyGroup>
+  <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <QtInstall>5.14.2_msvc2017_64</QtInstall>
+    <QtModules>core;gui;opengl;openglextensions;widgets;xml</QtModules>
+  </PropertyGroup>
+  <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <QtInstall>5.14.2_msvc2017_64</QtInstall>
+    <QtModules>core;gui;opengl;openglextensions;widgets;xml</QtModules>
+    <QtBuildConfig>release</QtBuildConfig>
+  </PropertyGroup>
+  <ImportGroup Condition="Exists('$(QtMsBuild)\qt.props')">
+    <Import Project="$(QtMsBuild)\qt.props" />
+  </ImportGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>Disabled</Optimization>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <AdditionalIncludeDirectories>.;$(QT_INCLUDE);.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <OpenMPSupport>false</OpenMPSupport>
+      <PreprocessorDefinitions>QT_NO_KEYWORDS;WIN32;_WINDOWS;_USE_MATH_DEFINES;RIGID_IPC_MESHES_DIR="E:/ThridParty/rigidIPC/meshes";IGL_STATIC_LIBRARY;NOMINMAX;LIBIGL_WITH_PREDICATES;JSON_USE_IMPLICIT_CONVERSIONS=1;JSON_DIAGNOSTICS=0;FMT_LOCALE;__TBB_NO_IMPLICIT_LINKAGE=1;EIGEN_STACK_ALLOCATION_LIMIT=0;TINYXML2_DEBUG;IPC_TOOLKIT_WITH_CORRECT_CCD;IPC_TOOLKIT_WITH_LOGGER;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>tbb12_debug.lib;libamdd.lib;libbtfd.lib;libcamdd.lib;libccolamdd.lib;libcholmodd.lib;libcolamdd.lib;libcxsparsed.lib;libklud.lib;libldld.lib;libspqrd.lib;metisd.lib;suitesparseconfigd.lib;opengl32.lib;glu32.lib;QGLViewerd2.lib;freetype.lib;cuda.lib;cudadevrt.lib;cudart.lib;cudart_static.lib;cusolver.lib;cusparse.lib;cublas.lib;tinyxml.lib;qucd.lib;igl.lib;igl_comiso.lib;igl_embree.lib;igl_opengl.lib;igl_opengl_glfw.lib;igl_opengl_glfw_imgui.lib;igl_png.lib;igl_predicates.lib;igl_stb_image.lib;igl_triangle.lib;imgui.lib;imguizmo.lib;predicates.lib;triangle.lib;BVH_lib.lib;spdlogd.lib;tight_inclusion.lib;filib.lib;mkl_intel_ilp64.lib;mkl_sequential.lib;mkl_core.lib;mkl_intel_lp64.lib;mkl_intel_thread.lib;libiomp5md.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+    </Link>
+    <QtUic>
+      <QtUicDir>$(IntDir)\uic\%(RelativeDir)</QtUicDir>
+    </QtUic>
+    <CudaCompile>
+      <TargetMachinePlatform>64</TargetMachinePlatform>
+    </CudaCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DebugInformationFormat />
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <OpenMPSupport>false</OpenMPSupport>
+      <AdditionalIncludeDirectories>.;.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>QT_NO_KEYWORDS;WIN32;_WINDOWS;NDEBUG;_USE_MATH_DEFINES;RIGID_IPC_MESHES_DIR="E:/ThridParty/rigidIPC/meshes";IGL_STATIC_LIBRARY;NOMINMAX;LIBIGL_WITH_PREDICATES;JSON_USE_IMPLICIT_CONVERSIONS=1;JSON_DIAGNOSTICS=0;__TBB_NO_IMPLICIT_LINKAGE=1;EIGEN_STACK_ALLOCATION_LIMIT=0;IPC_TOOLKIT_WITH_CORRECT_CCD;IPC_TOOLKIT_WITH_LOGGER;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalOptions>-D_SILENCE_CXX17_ADAPTOR_TYPEDEFS_DEPRECATION_WARNING /bigobj %(AdditionalOptions)</AdditionalOptions>
+      <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <AdditionalDependencies>tbb12.lib;libamd.lib;libbtf.lib;libcamd.lib;libccolamd.lib;libcholmod.lib;libcolamd.lib;libcxsparse.lib;libklu.lib;libldl.lib;libspqr.lib;metis.lib;suitesparseconfig.lib;opengl32.lib;glu32.lib;QGLViewer2.lib;freetype.lib;cuda.lib;cudadevrt.lib;cudart.lib;cudart_static.lib;OpenCL.lib;cusolver.lib;cusparse.lib;cublas.lib;tinyxml.lib;quc.lib;mkl_intel_ilp64.lib;mkl_sequential.lib;mkl_core.lib;mkl_intel_lp64.lib;mkl_intel_thread.lib;mkl_tbb_thread.lib;libiomp5md.lib;igl.lib;igl_comiso.lib;igl_embree.lib;igl_opengl.lib;igl_opengl_glfw.lib;igl_opengl_glfw_imgui.lib;igl_png.lib;igl_predicates.lib;igl_stb_image.lib;igl_triangle.lib;imgui.lib;imguizmo.lib;predicates.lib;triangle.lib;BVH_lib.lib;spdlog.lib;tight_inclusion.lib;filib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <AdditionalOptions>/NODEFAULTLIB:library /LTCG %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+    <CudaCompile>
+      <CodeGeneration>compute_75,sm_75;%(CodeGeneration)</CodeGeneration>
+      <PtxAsOptionV>false</PtxAsOptionV>
+      <TargetMachinePlatform>64</TargetMachinePlatform>
+      <GenerateRelocatableDeviceCode>false</GenerateRelocatableDeviceCode>
+    </CudaCompile>
+    <CudaLink>
+      <Optimization>O2</Optimization>
+    </CudaLink>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Bow\Geometry\AnalyticalLevelSet.cpp" />
+    <ClCompile Include="Bow\Geometry\GeometryDerivative.cpp" />
+    <ClCompile Include="Bow\Geometry\IpcTookit\EdgeEdgeCcd.cpp" />
+    <ClCompile Include="Bow\Geometry\IpcTookit\EdgeEdgeDistance.cpp" />
+    <ClCompile Include="Bow\Geometry\IpcTookit\PointEdgeCcd.cpp" />
+    <ClCompile Include="Bow\Geometry\IpcTookit\PointEdgeDistance.cpp" />
+    <ClCompile Include="Bow\Geometry\IpcTookit\PointPointDistance.cpp" />
+    <ClCompile Include="Bow\Geometry\IpcTookit\PointTriangleCcd.cpp" />
+    <ClCompile Include="Bow\Geometry\IpcTookit\PointTriangleDistance.cpp" />
+    <ClCompile Include="Bow\Geometry\Primitives.cpp" />
+    <ClCompile Include="Bow\Geometry\Query.cpp" />
+    <ClCompile Include="Bow\IO\ply.cpp" />
+    <ClCompile Include="Bow\IO\tinyply.cpp" />
+    <ClCompile Include="Bow\IO\vtk.cpp" />
+    <ClCompile Include="Bow\Math\GivensRotation.cpp" />
+    <ClCompile Include="Bow\Math\LinearSolver\Amgcl.cpp" />
+    <ClCompile Include="Bow\Math\LinearSolver\SparseCholesky.cpp" />
+    <ClCompile Include="Bow\Math\LinearSolver\SparseQR.cpp" />
+    <ClCompile Include="Bow\Math\MatrixDerivative.cpp" />
+    <ClCompile Include="Bow\Math\PolarDecomposition.cpp" />
+    <ClCompile Include="Bow\Math\SVD.cpp" />
+    <ClCompile Include="Bow\Math\Utils.cpp" />
+    <ClCompile Include="Bow\Physics\AsRigidAsPossible.cpp" />
+    <ClCompile Include="Bow\Physics\ConstitutiveModel.cpp" />
+    <ClCompile Include="Bow\Physics\EquationOfState.cpp" />
+    <ClCompile Include="Bow\Physics\FixedCorotated.cpp" />
+    <ClCompile Include="Bow\Physics\LinearElasticity.cpp" />
+    <ClCompile Include="Bow\Physics\NeoHookean.cpp" />
+    <ClCompile Include="Bow\Physics\StvkWithHenckyIsotropic.cpp" />
+    <ClCompile Include="Bow\Simulation\FEM\State.cpp" />
+    <ClCompile Include="Bow\Simulation\FEM\Utils.cpp" />
+    <ClCompile Include="Bow\Utils\FiniteDiff.cpp" />
+    <ClCompile Include="Bow\Utils\Logging.cpp" />
+    <ClCompile Include="Bow\Utils\Timer.cpp" />
+    <ClCompile Include="Commom\BaseFrame.cpp" />
+    <ClCompile Include="Commom\DataConversion.cpp" />
+    <ClCompile Include="Commom\GeometryComputation.cpp" />
+    <ClCompile Include="Commom\PolynomialSolver.cpp" />
+    <ClCompile Include="Commom\RondomValue.cpp" />
+    <ClCompile Include="Commom\SparseMatrixRemoveRows.cpp" />
+    <ClCompile Include="Commom\SparseMatrixTopology.cpp" />
+    <ClCompile Include="Commom\SPDProjectFunction.cpp" />
+    <ClCompile Include="Commom\tinyxml\tinyxml.cpp" />
+    <ClCompile Include="Commom\Utils.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Model\BaseModel.cpp" />
+    <ClCompile Include="Model\GeometryElement.cpp" />
+    <ClCompile Include="Model\MedialMesh\BaseMedialMedialHandle.cpp" />
+    <ClCompile Include="Model\MedialMesh\BaseMedialMesh.cpp" />
+    <ClCompile Include="Model\MedialMesh\BaseMedialMeshBufferPool.cpp" />
+    <ClCompile Include="Model\tiny_obj_loader.cc" />
+    <ClCompile Include="Model\TriangleMesh\BaseRenderMaterial.cpp" />
+    <ClCompile Include="Model\TriangleMesh\BaseSurfaceHandle.cpp" />
+    <ClCompile Include="Model\TriangleMesh\BaseSurfaceMesh.cpp" />
+    <ClCompile Include="Model\TriangleMesh\BaseSurfaceMeshBufferPool.cpp" />
+    <ClCompile Include="Model\VolumetricMesh\BaseTetMesh.cpp" />
+    <ClCompile Include="Model\VolumetricMesh\BaseTetMeshBufferPool.cpp" />
+    <ClCompile Include="Model\VolumetricMesh\BaseTetMeshHandle.cpp" />
+    <ClCompile Include="Model\VolumetricMesh\IsotropicMaterial\IsotropicMaterial.cpp" />
+    <ClCompile Include="Model\VolumetricMesh\IsotropicMaterial\IsotropicMaterialWithCompressionResistance.cpp" />
+    <ClCompile Include="Model\VolumetricMesh\IsotropicMaterial\NeoHookeanIsotropicMaterial.cpp" />
+    <ClCompile Include="Model\VolumetricMesh\IsotropicMaterial\StvkIsotropicMaterial.cpp" />
+    <ClCompile Include="Model\VolumetricMesh\IsotropicMaterial\VolumetricMeshENuMaterial.cpp" />
+    <ClCompile Include="Scene\BaseLighting.cpp" />
+    <ClCompile Include="Scene\BaseScene.cpp" />
+    <ClCompile Include="Scene\StandardCamera.cpp" />
+    <ClCompile Include="Shader\ScreenFontType.cpp" />
+    <ClCompile Include="Shader\ShaderProgram.cpp" />
+    <ClCompile Include="SimFramework.cpp" />
+    <ClCompile Include="Simulator\BaseSimulator.cpp" />
+    <ClCompile Include="Simulator\Bvhs\AipcBvhs.cpp" />
+    <ClCompile Include="Simulator\Cuda\CudaHandle.cpp" />
+    <ClCompile Include="Simulator\PD-IPC\PdIpcSimulator.cpp" />
+    <ClCompile Include="Ui\BaseBottomWidget.cpp" />
+    <ClCompile Include="Ui\BaseMainWidget.cpp" />
+    <ClCompile Include="Ui\BaseMaterialEditWidget.cpp" />
+    <ClCompile Include="Ui\BaseRightWidget.cpp" />
+    <ClCompile Include="Ui\BaseToolBar.cpp" />
+    <ClCompile Include="Ui\ColorSelectionPanel.cpp" />
+    <ClCompile Include="Ui\MainLayout.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="SimFramework.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="SimFramework.ui" />
+    <QtUic Include="Ui\Form\BottomFormWidget.ui" />
+    <QtUic Include="Ui\Form\ColorSelectionWidget.ui" />
+    <QtUic Include="Ui\Form\MaterialEditWidget.ui" />
+    <QtUic Include="Ui\Form\RightFormWidget.ui" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="SimFramework.qrc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Bow\Geometry\AnalyticalLevelSet.h" />
+    <ClInclude Include="Bow\Geometry\GeometryDerivative.h" />
+    <ClInclude Include="Bow\Geometry\IpcTookit\CCD.h" />
+    <ClInclude Include="Bow\Geometry\IpcTookit\DistanceType.h" />
+    <ClInclude Include="Bow\Geometry\IpcTookit\EdgeEdgeCcd.h" />
+    <ClInclude Include="Bow\Geometry\IpcTookit\EdgeEdgeDistance.h" />
+    <ClInclude Include="Bow\Geometry\IpcTookit\PointEdgeCcd.h" />
+    <ClInclude Include="Bow\Geometry\IpcTookit\PointEdgeDistance.h" />
+    <ClInclude Include="Bow\Geometry\IpcTookit\PointPointDistance.h" />
+    <ClInclude Include="Bow\Geometry\IpcTookit\PointTriangleCcd.h" />
+    <ClInclude Include="Bow\Geometry\IpcTookit\PointTriangleDistance.h" />
+    <ClInclude Include="Bow\Geometry\OrthogonalBasis.h" />
+    <ClInclude Include="Bow\Geometry\Primitives.h" />
+    <ClInclude Include="Bow\Geometry\Query.h" />
+    <ClInclude Include="Bow\IO\partio.h" />
+    <ClInclude Include="Bow\IO\ply.h" />
+    <ClInclude Include="Bow\IO\tinyply.h" />
+    <ClInclude Include="Bow\IO\vtk.h" />
+    <ClInclude Include="Bow\Macros.h" />
+    <ClInclude Include="Bow\Math\Barrier.h" />
+    <ClInclude Include="Bow\Math\BSpline.h" />
+    <ClInclude Include="Bow\Math\GivensRotation.h" />
+    <ClInclude Include="Bow\Math\LinearSolver\Amgcl.h" />
+    <ClInclude Include="Bow\Math\LinearSolver\ConjugateGradient.h" />
+    <ClInclude Include="Bow\Math\LinearSolver\SparseCholesky.h" />
+    <ClInclude Include="Bow\Math\LinearSolver\SparseQR.h" />
+    <ClInclude Include="Bow\Math\MathTools.h" />
+    <ClInclude Include="Bow\Math\MatrixDerivative.h" />
+    <ClInclude Include="Bow\Math\PolarDecomposition.h" />
+    <ClInclude Include="Bow\Math\SVD.h" />
+    <ClInclude Include="Bow\Math\Utils.h" />
+    <ClInclude Include="Bow\Optimization\Newton.h" />
+    <ClInclude Include="Bow\Physics\AsRigidAsPossible.h" />
+    <ClInclude Include="Bow\Physics\ConstitutiveModel.h" />
+    <ClInclude Include="Bow\Physics\EquationOfState.h" />
+    <ClInclude Include="Bow\Physics\FixedCorotated.h" />
+    <ClInclude Include="Bow\Physics\LinearElasticity.h" />
+    <ClInclude Include="Bow\Physics\NeoHookean.h" />
+    <ClInclude Include="Bow\Physics\StvkWithHenckyIsotropic.h" />
+    <ClInclude Include="Bow\Simulation\FEM\ElasticityEnergy.h" />
+    <ClInclude Include="Bow\Simulation\FEM\ExternalForceEnergy.h" />
+    <ClInclude Include="Bow\Simulation\FEM\FEMEnergies.h" />
+    <ClInclude Include="Bow\Simulation\FEM\FEMSimulator.h" />
+    <ClInclude Include="Bow\Simulation\FEM\ForwardOp.h" />
+    <ClInclude Include="Bow\Simulation\FEM\FrictionUtils.h" />
+    <ClInclude Include="Bow\Simulation\FEM\InertialEnergy.h" />
+    <ClInclude Include="Bow\Simulation\FEM\IpcEnergy.h" />
+    <ClInclude Include="Bow\Simulation\FEM\State.h" />
+    <ClInclude Include="Bow\Simulation\FEM\Utils.h" />
+    <ClInclude Include="Bow\Simulation\PhysicallyBasedSimulator.h" />
+    <ClInclude Include="Bow\Simulation\Prototypes.h" />
+    <ClInclude Include="Bow\Types.h" />
+    <ClInclude Include="Bow\Utils\CMDParser.h" />
+    <ClInclude Include="Bow\Utils\FileSystem.h" />
+    <ClInclude Include="Bow\Utils\FiniteDiff.h" />
+    <ClInclude Include="Bow\Utils\Logging.h" />
+    <ClInclude Include="Bow\Utils\Serialization.h" />
+    <ClInclude Include="Bow\Utils\Timer.h" />
+    <ClInclude Include="Commom\AutoFlipSVD.h" />
+    <ClInclude Include="Commom\BaseFrame.h" />
+    <ClInclude Include="Commom\ConvertSparseMatrixToCSR.h" />
+    <ClInclude Include="Commom\DataConversion.h" />
+    <ClInclude Include="Commom\DataStructure\DataSet.h" />
+    <ClInclude Include="Commom\EigenMatrixIO.h" />
+    <ClInclude Include="Commom\FileIO.h" />
+    <ClInclude Include="Commom\BufferSerialization.h" />
+    <ClInclude Include="Commom\GeometryComputation.h" />
+    <ClInclude Include="Commom\PolynomialSolver.h" />
+    <ClInclude Include="Commom\RondomValue.h" />
+    <ClInclude Include="Commom\SparseMatrixRemoveRows.h" />
+    <ClInclude Include="Commom\SparseMatrixTopology.h" />
+    <ClInclude Include="Commom\SPDProjectFunction.h" />
+    <ClInclude Include="Commom\SVD\ImplicitQRSVD.h" />
+    <ClInclude Include="Commom\SVD\SvdTools.h" />
+    <ClInclude Include="Commom\tinyxml\tinyxml.h" />
+    <ClInclude Include="Commom\Utils.h" />
+    <ClInclude Include="DataCore.h" />
+    <ClInclude Include="MatrixCore.h" />
+    <ClInclude Include="Model\BaseModel.h" />
+    <ClInclude Include="Model\GeometryElement.h" />
+    <ClInclude Include="Model\MedialMesh\BaseMedialMedialHandle.h" />
+    <ClInclude Include="Model\MedialMesh\BaseMedialMesh.h" />
+    <ClInclude Include="Model\MedialMesh\BaseMedialMeshBufferPool.h" />
+    <ClInclude Include="Model\tiny_obj_loader.h" />
+    <ClInclude Include="Model\TriangleMesh\BaseRenderMaterial.h" />
+    <ClInclude Include="Model\TriangleMesh\BaseSurfaceHandle.h" />
+    <ClInclude Include="Model\TriangleMesh\BaseSurfaceMesh.h" />
+    <ClInclude Include="Model\TriangleMesh\BaseSurfaceMeshBufferPool.h" />
+    <ClInclude Include="Model\VolumetricMesh\BaseTetMesh.h" />
+    <ClInclude Include="Model\VolumetricMesh\BaseTetMeshBufferPool.h" />
+    <ClInclude Include="Model\VolumetricMesh\BaseTetMeshHandle.h" />
+    <ClInclude Include="Model\VolumetricMesh\BaseTetMeshMaterial.h" />
+    <ClInclude Include="Model\VolumetricMesh\IsotropicMaterial\IsotropicMaterial.h" />
+    <ClInclude Include="Model\VolumetricMesh\IsotropicMaterial\IsotropicMaterialWithCompressionResistance.h" />
+    <ClInclude Include="Model\VolumetricMesh\IsotropicMaterial\NeoHookeanIsotropicMaterial.h" />
+    <ClInclude Include="Model\VolumetricMesh\IsotropicMaterial\StvkIsotropicMaterial.h" />
+    <ClInclude Include="Model\VolumetricMesh\IsotropicMaterial\VolumetricMeshENuMaterial.h" />
+    <ClInclude Include="Scene\BaseLighting.h" />
+    <ClInclude Include="Scene\StandardCamera.h" />
+    <ClInclude Include="Shader\ScreenFontType.h" />
+    <ClInclude Include="Shader\ShaderProgram.h" />
+    <QtMoc Include="Ui\BaseMainWidget.h" />
+    <QtMoc Include="Ui\BaseMaterialEditWidget.h" />
+    <QtMoc Include="Ui\ColorSelectionPanel.h" />
+    <QtMoc Include="Ui\BaseBottomWidget.h" />
+    <QtMoc Include="Ui\BaseRightWidget.h" />
+    <ClInclude Include="Simulator\Aipc\CollisionCulling\AipcElasticityEnergy.h" />
+    <ClInclude Include="Simulator\BaseSimulator.h" />
+    <ClInclude Include="Simulator\Bvhs\AipcBvhs.h" />
+    <ClInclude Include="Simulator\Cuda\CudaHandle.h" />
+    <ClInclude Include="Simulator\Cuda\CudaHeader.cuh" />
+    <ClInclude Include="Simulator\Cuda\CudaMatrixOperator.cuh" />
+    <ClInclude Include="Simulator\Cuda\CudaSVD.cuh" />
+    <ClInclude Include="Simulator\ObjSequenceRender.h" />
+    <ClInclude Include="Simulator\PD-IPC\PdIpcClothModel.h" />
+    <ClInclude Include="Simulator\PD-IPC\PdIpcGpuFunc.cuh" />
+    <ClInclude Include="Simulator\PD-IPC\PdIpcSimulator.h" />
+    <ClInclude Include="Simulator\PD-IPC\PdIpcVolumetricModel.h" />
+    <ClInclude Include="Simulator\PD-IPC\PdIpcModel.h" />
+    <ClInclude Include="Simulator\PD-IPC\TetConstraint.h" />
+    <CudaCompile Include="Simulator\PD-IPC\PdIpcGpuFunc.cu" />
+    <ClInclude Include="Simulator\SimulatorFactor.h" />
+    <ClInclude Include="Ui\BaseToolBar.h" />
+    <ClInclude Include="Ui\MainLayout.h" />
+    <QtMoc Include="Scene\BaseScene.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Bow\Simulation\FEM\ElasticityEnergy.tpp" />
+    <None Include="Bow\Simulation\FEM\ExternalForceEnergy.tpp" />
+    <None Include="Bow\Simulation\FEM\ForwardOp.tpp" />
+    <None Include="Bow\Simulation\FEM\InertialEnergy.tpp" />
+    <None Include="Bow\Simulation\FEM\IpcEnergy.tpp" />
+    <None Include="ClassDiagram.cd" />
+    <None Include="cpp.hint" />
+    <None Include="Shader\program\depth_map.fs" />
+    <None Include="Shader\program\depth_map.vs" />
+    <None Include="Shader\program\phong_shader_program.fs" />
+    <None Include="Shader\program\phong_shader_program.vs" />
+    <None Include="Shader\program\text_shader_program.fs" />
+    <None Include="Shader\program\text_shader_program.vs" />
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="Simulator\Cuda\CudaMatrixOperator.cu" />
+    <CudaCompile Include="Simulator\Cuda\CudaSVD.cu" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
+    <Import Project="$(QtMsBuild)\qt.targets" />
+  </ImportGroup>
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 11.6.targets" />
+  </ImportGroup>
+</Project>

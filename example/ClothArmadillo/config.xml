@@ -1,0 +1,53 @@
+<?xml version="1.0" ?>
+<SimFramework name = "pd_ipc_simulator" run = "CUDA">
+<simulator> 
+<scene>
+<startFrame> 0 </startFrame>
+<maxFrame> 2000 </maxFrame>
+<debug_draw> 1 </debug_draw>
+</scene>
+<timeStep> 0.01 </timeStep> 
+<gravity> -9.8 </gravity> 
+<dhat>5e-3</dhat>
+<tol> 1e-2 </tol>
+<kappa>5e7</kappa>
+<penalty>170000 3000 0.05</penalty>
+<object name = "cloth1" nick_name = "cloth1" uniform = "false" origin = "false">
+<type> 0 1e6 25 1e12 </type>
+<patchDim> 50 </patchDim> 
+<scale> 1 1 1 </scale> 
+<translation> 0 0 0 </translation>
+<rotation> 0 0 0 0</rotation>
+<density> 2500 </density>  
+</object>
+<object name = "cloth2" nick_name = "cloth2" uniform = "false" origin = "false">
+<type> 0 1e6 25 1e12 </type>
+<patchDim> 50 </patchDim> 
+<scale> 1 1 1 </scale> 
+<translation> 0 0 0 </translation>
+<rotation> 0 0 0 0</rotation>
+<density> 2500 </density>  
+</object>
+<object name = "armadillo" nick_name = "armadillo" volumetric_mesh = "tet" uniform = "true" origin = "true">
+<type> 1 2e6 1e3 1e12 </type>
+<patchDim> 50 </patchDim> 
+<scale> 3.5 3.5 3.5 </scale> 
+<translation> 1.5 2.3 1 </translation>
+<rotation> 0 0 0 0</rotation>
+<density> 1000 </density>  
+</object>
+<static_object name = "hit" nick_name = "hit" uniform = "false" origin = "false">
+<type> 0 1e3 1e-5 1e12 </type>
+<patchDim> 10 </patchDim> 
+<scale> 1 1 1 </scale> 
+<translation> 0 6e-3 0 </translation>
+<rotation> 0 0 0 0</rotation>
+<density> 1 </density>  
+</static_object>
+</simulator>
+</SimFramework>
+
+
+
+
+
