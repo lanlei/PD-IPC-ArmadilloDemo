@@ -1,6 +1,5 @@
 #include "SimFramework.h"
 #include <QtWidgets/QApplication>
-#include <igl/Timer.h>
 
 int main(int argc, char *argv[])
 {	

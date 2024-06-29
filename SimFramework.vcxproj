@@ -55,14 +55,14 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
-    <IncludePath>$(BOOST_INCLUDE_DIR);$(TBB_INCLUDE);C:\ThridParty\cxxopts\include;C:\ThridParty\partio\src\lib;.\external\qucsdk\include;$(QGLVIEWER_INCLUDE);$(EIGEN_INCLUDE);$(FREETYPE_INCLUDE);$(CUDA_PATH)\include;$(NVCUDASAMPLES_ROOT)\common\inc\;$(QUCSDK_INCLUDE);$(MKL_PATH)\include;C:\ThridParty\libigl\include;C:\Source Code\ipc-toolkit;C:\ThridParty\fmt\include;C:\ThridParty\spdlog\include;C:\ThridParty\Tight-Inclusion;C:\ThridParty\robin-map\include;C:\ThridParty\SimpleBVH\src;C:\ThridParty\cli11\include;C:\ThridParty\libigl\external;C:\ThridParty\filib\filib;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\ThridParty\SuiteSparse\suitesparse\build\lib\Release;C:\ThridParty\tbb\build\Release;$(TBB_LIBRARY);C:\ThridParty\boost\boost\stage\lib;.\external\qucsdk\;$(LIB_RELEASE);$(CUDA_PATH)\lib\x64;$(MKL_PATH)\lib\intel64;C:\Program Files (x86)\IntelSWTools\compilers_and_libraries_2020.1.216\windows\compiler\lib\intel64_win;C:\Source Code\ipc-toolkit\ipc-toolkit\x64\Release;C:\ThridParty\libigl\build\Release;C:\ThridParty\fmt\build\Release;C:\ThridParty\SimpleBVH\build\Release;C:\ThridParty\spdlog\build\Release;C:\ThridParty\Tight-Inclusion\build\Release;C:\ThridParty\filib\build\Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(TBB_INCLUDE);.\external\qucsdk\include;$(QGLVIEWER_INCLUDE);$(EIGEN_INCLUDE);$(FREETYPE_INCLUDE);$(CUDA_PATH)\include;$(NVCUDASAMPLES_ROOT)\common\inc\;$(QUCSDK_INCLUDE);$(MKL_PATH)\include;C:\ThridParty\SimpleBVH\src;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\ThridParty\tbb\build\Release;$(TBB_LIBRARY);.\external\qucsdk\;$(LIB_RELEASE);$(CUDA_PATH)\lib\x64;$(MKL_PATH)\lib\intel64;C:\Program Files (x86)\IntelSWTools\compilers_and_libraries_2020.1.216\windows\compiler\lib\intel64_win;C:\ThridParty\SimpleBVH\build\Release;$(LibraryPath)</LibraryPath>
     <ExecutablePath>C:\Program Files %28x86%29\Intel\oneAPI\mkl\2021.3.0\redist\intel64;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IncludePath>$(JASONCPP_INCLUDE);.\;$(QT_INCLUDE);.\external\qucsdk\include;$(BOOST_INCLUDE_DIR);$(TBB_INCLUDE);$(THRID_PARTY)\cxxopts\include;$(THRID_PARTY)\partio\src\lib;$(QGLVIEWER_INCLUDE);$(EIGEN_INCLUDE);$(FREETYPE_INCLUDE);$(CUDA_PATH)\include;$(NVCUDASAMPLES_ROOT)\common\inc\;$(QUCSDK_INCLUDE);$(MKL_PATH)\include;$(THRID_PARTY)\libigl\include;$(IPC_TOOLKIT);$(THRID_PARTY)\fmt\include;$(THRID_PARTY)\spdlog\include;$(THRID_PARTY)\Tight-Inclusion;$(THRID_PARTY)\robin-map\include;$(THRID_PARTY)\SimpleBVH\src;$(THRID_PARTY)\cli11\include;$(THRID_PARTY)\libigl\external;$(THRID_PARTY)\filib\filib;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\ThridParty\tbb\build\Release;C:\ThridParty\Libs\Debug;$(TBB_LIBRARY);$(THRID_PARTY)\tbb\build\Debug;$(THRID_PARTY)\SuiteSparse\suitesparse\build\lib\Debug;$(TBB_LIBRARY_DEBUG);$(BOOST_ROOT)\stage\lib;.\external\qucsdk\;$(LIB_Debug);$(CUDA_PATH)\lib\x64;C:\Source Code\ipc-toolkit\ipc-toolkit\x64\Debug;$(MKL_PATH)\lib;C:\ThridParty\libigl\build\Debug;C:\ThridParty\fmt\build\Debug;C:\ThridParty\SimpleBVH\build\Debug;C:\ThridParty\spdlog\build\Debug;C:\ThridParty\Tight-Inclusion\build\Debug;C:\ThridParty\filib\build\Debug;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\ThridParty\tbb\build\Release;C:\ThridParty\Libs\Debug;$(TBB_LIBRARY);$(THRID_PARTY)\tbb\build\Debug;$(TBB_LIBRARY_DEBUG);.\external\qucsdk\;$(LIB_Debug);$(CUDA_PATH)\lib\x64;$(MKL_PATH)\lib;C:\ThridParty\SimpleBVH\build\Debug;$(LibraryPath)</LibraryPath>
     <ExecutablePath>C:\Program Files (x86)\IntelSWTools\compilers_and_libraries_2020.1.216\windows\redist\intel64_win\mkl;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -97,7 +97,7 @@
       <SubSystem>Console</SubSystem>
       <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>tbb12_debug.lib;libamdd.lib;libbtfd.lib;libcamdd.lib;libccolamdd.lib;libcholmodd.lib;libcolamdd.lib;libcxsparsed.lib;libklud.lib;libldld.lib;libspqrd.lib;metisd.lib;suitesparseconfigd.lib;opengl32.lib;glu32.lib;QGLViewerd2.lib;freetype.lib;cuda.lib;cudadevrt.lib;cudart.lib;cudart_static.lib;cusolver.lib;cusparse.lib;cublas.lib;tinyxml.lib;qucd.lib;igl.lib;igl_comiso.lib;igl_embree.lib;igl_opengl.lib;igl_opengl_glfw.lib;igl_opengl_glfw_imgui.lib;igl_png.lib;igl_predicates.lib;igl_stb_image.lib;igl_triangle.lib;imgui.lib;imguizmo.lib;predicates.lib;triangle.lib;BVH_lib.lib;spdlogd.lib;tight_inclusion.lib;filib.lib;mkl_intel_ilp64.lib;mkl_sequential.lib;mkl_core.lib;mkl_intel_lp64.lib;mkl_intel_thread.lib;libiomp5md.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>tbb12_debug.lib;opengl32.lib;glu32.lib;QGLViewerd2.lib;freetype.lib;cuda.lib;cudadevrt.lib;cudart.lib;cudart_static.lib;cusolver.lib;cusparse.lib;cublas.lib;tinyxml.lib;qucd.lib;BVH_lib.lib;mkl_intel_ilp64.lib;mkl_sequential.lib;mkl_core.lib;mkl_intel_lp64.lib;mkl_intel_thread.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
     </Link>
@@ -128,7 +128,7 @@
       <SubSystem>Console</SubSystem>
       <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalDependencies>tbb12.lib;libamd.lib;libbtf.lib;libcamd.lib;libccolamd.lib;libcholmod.lib;libcolamd.lib;libcxsparse.lib;libklu.lib;libldl.lib;libspqr.lib;metis.lib;suitesparseconfig.lib;opengl32.lib;glu32.lib;QGLViewer2.lib;freetype.lib;cuda.lib;cudadevrt.lib;cudart.lib;cudart_static.lib;OpenCL.lib;cusolver.lib;cusparse.lib;cublas.lib;tinyxml.lib;quc.lib;mkl_intel_ilp64.lib;mkl_sequential.lib;mkl_core.lib;mkl_intel_lp64.lib;mkl_intel_thread.lib;mkl_tbb_thread.lib;libiomp5md.lib;igl.lib;igl_comiso.lib;igl_embree.lib;igl_opengl.lib;igl_opengl_glfw.lib;igl_opengl_glfw_imgui.lib;igl_png.lib;igl_predicates.lib;igl_stb_image.lib;igl_triangle.lib;imgui.lib;imguizmo.lib;predicates.lib;triangle.lib;BVH_lib.lib;spdlog.lib;tight_inclusion.lib;filib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>tbb12.lib;opengl32.lib;glu32.lib;QGLViewer2.lib;freetype.lib;cuda.lib;cudadevrt.lib;cudart.lib;cudart_static.lib;OpenCL.lib;cusolver.lib;cusparse.lib;cublas.lib;tinyxml.lib;quc.lib;mkl_intel_ilp64.lib;mkl_sequential.lib;mkl_core.lib;mkl_intel_lp64.lib;mkl_intel_thread.lib;mkl_tbb_thread.lib;BVH_lib.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <AdditionalOptions>/NODEFAULTLIB:library /LTCG %(AdditionalOptions)</AdditionalOptions>
