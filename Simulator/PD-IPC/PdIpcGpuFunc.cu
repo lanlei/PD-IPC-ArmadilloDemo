@@ -3016,6 +3016,7 @@ __global__ void solveVolumetricStrainConstraintKernel
 					dHat,
 					dHat2,
 					kappa,
+					dt,
 					potentialCollisionPairsNum,
 					devPotentialCollisionPairsList,
 					devX,
