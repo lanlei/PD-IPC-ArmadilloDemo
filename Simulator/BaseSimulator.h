@@ -85,7 +85,9 @@ public:
 	virtual void handleSurfacePointsSelectedEvent(){}
 	virtual void handleTetPointsSelectedEvent(){}
 
-	virtual void handleMouseForce(int nid, qeal& x, qeal& y, qeal& z) { std::cout << " handleMouseForce " << std::endl; }
+	virtual void handleMouseForce(int nid, qeal& x, qeal& y, qeal& z) { 
+		//std::cout << " handleMouseForce " << std::endl; 
+	}
 
 	virtual void handleMouseForce(std::vector<int>& list, qeal& x, qeal& y, qeal& z) { std::cout << " handleMouseForce " << std::endl; }
 	virtual void getSurfacePoint(const int id, qeal& x, qeal& y, qeal& z) { x = pointsBuffer.buffer[3 * id];  y = pointsBuffer.buffer[3 * id + 1]; z = pointsBuffer.buffer[3 * id + 2];}

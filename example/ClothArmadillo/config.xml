@@ -11,7 +11,6 @@
 <dhat>5e-3</dhat>
 <tol> 1e-2 </tol>
 <kappa>5e7</kappa>
-<penalty>170000 3000 0.05</penalty>
 <object name = "cloth1" nick_name = "cloth1" uniform = "false" origin = "false">
 <type> 0 1e6 25 1e12 </type>
 <patchDim> 50 </patchDim> 
@@ -36,6 +35,12 @@
 <rotation> 0 0 0 0</rotation>
 <density> 1000 </density>  
 </object>
+</simulator>
+</SimFramework>
+
+
+
+
 <static_object name = "hit" nick_name = "hit" uniform = "false" origin = "false">
 <type> 0 1e3 1e-5 1e12 </type>
 <patchDim> 10 </patchDim> 
@@ -44,10 +49,3 @@
 <rotation> 0 0 0 0</rotation>
 <density> 1 </density>  
 </static_object>
-</simulator>
-</SimFramework>
-
-
-
-
-

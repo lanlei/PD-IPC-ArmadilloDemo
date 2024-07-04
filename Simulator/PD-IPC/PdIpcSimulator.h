@@ -299,7 +299,7 @@ namespace PD_IPC
 		
 		// collision detection
 		bool enableAllEC = true; // enable all edge edge constraints
-		qeal* devInflationRadius;
+		qeal inflation_radius;
 		std::vector<std::vector<int>> m_patchesFaces;
 		std::vector<std::vector<int>> m_patchesEdges;
 		std::vector<std::vector<int>> m_patchesPoints;
@@ -643,40 +643,40 @@ namespace PD_IPC
 
 		virtual void handleMouseForce(int nid, qeal& x, qeal& y, qeal& z)
 		{
-			qeal scale = 40000;
-			mouseForce.setZero();
-			if (nid > 0 && nid < simPointsNum)
-			{
-				mouseForce.col(nid) = Vector3(x, y, z) * scale;
-				//std::cout << "mouseForce: " << nid <<" " << Vector3(x, y, z).transpose() << std::endl;
-			}
-			cudaMemcpy(devMouseForce, mouseForce.data(), sizeof(qeal) * simDims, cudaMemcpyHostToDevice);
-		}
-
-		virtual void handleMouseForce(std::vector<int>&list, qeal& x, qeal& y, qeal& z)
-		{
-			qeal scale = 1000;
-			mouseForce.setZero();
-			mousePointsList.clear();
-			mousePointsList.resize(list.size());
-			mousePointsIds = list;
-			for (int i = 0; i < list.size(); i++)
-			{
-				mouseForce.col(list[i]) = Vector3(x, y, z) * scale;
-				mousePointsList[i] = Vector3(x, y, z);
-			}
-			mouseForceLine = Vector3(x, y, z) * scale;
-
-			//std::cout << list.size() << std::endl;
-
+			//qeal scale = 40000;
+			//mouseForce.setZero();
 			//if (nid > 0 && nid < simPointsNum)
 			//{
 			//	mouseForce.col(nid) = Vector3(x, y, z) * scale;
 			//	//std::cout << "mouseForce: " << nid <<" " << Vector3(x, y, z).transpose() << std::endl;
 			//}
+			//cudaMemcpy(devMouseForce, mouseForce.data(), sizeof(qeal) * simDims, cudaMemcpyHostToDevice);
+		}
 
-			std::cout << "mouseForce: " << list.size() << " " << Vector3(x, y, z).transpose() << std::endl;
-			cudaMemcpy(devMouseForce, mouseForce.data(), sizeof(qeal) * simDims, cudaMemcpyHostToDevice);
+		virtual void handleMouseForce(std::vector<int>&list, qeal& x, qeal& y, qeal& z)
+		{
+			//qeal scale = 1000;
+			//mouseForce.setZero();
+			//mousePointsList.clear();
+			//mousePointsList.resize(list.size());
+			//mousePointsIds = list;
+			//for (int i = 0; i < list.size(); i++)
+			//{
+			//	mouseForce.col(list[i]) = Vector3(x, y, z) * scale;
+			//	mousePointsList[i] = Vector3(x, y, z);
+			//}
+			//mouseForceLine = Vector3(x, y, z) * scale;
+
+			////std::cout << list.size() << std::endl;
+
+			////if (nid > 0 && nid < simPointsNum)
+			////{
+			////	mouseForce.col(nid) = Vector3(x, y, z) * scale;
+			////	//std::cout << "mouseForce: " << nid <<" " << Vector3(x, y, z).transpose() << std::endl;
+			////}
+
+			//std::cout << "mouseForce: " << list.size() << " " << Vector3(x, y, z).transpose() << std::endl;
+			//cudaMemcpy(devMouseForce, mouseForce.data(), sizeof(qeal) * simDims, cudaMemcpyHostToDevice);
 		}
 		
 		/*
@@ -895,22 +895,22 @@ namespace PD_IPC
 			fout.close();
 
 
-			filename = _sceneDir + "saveMouseForce/";
-			code = mkdir(filename.c_str());
-			if (frame < 10)
-				filename += "mouse_000" + QString().setNum(frame).toStdString() + ".txt";
-			else if (frame < 100)
-				filename += "mouse_00" + QString().setNum(frame).toStdString() + ".txt";
-			else if (frame < 1000)
-				filename += "mouse_0" + QString().setNum(frame).toStdString() + ".txt";
-			else
-				filename += "mouse_" + QString().setNum(frame).toStdString() + ".txt";
-			fout.open(filename);
-			fout << mousePointsIds.size() << std::endl;
-			fout << mouseForceLine[0] << " " << mouseForceLine[1] <<" " << mouseForceLine[2] << std::endl;
-			for (int i = 0; i < mousePointsIds.size(); i++)
-				fout << mousePointsIds[i] << " " << mousePointsList[i][0] << " " << mousePointsList[i][1] << " " << mousePointsList[i][2] << std::endl;
-			fout.close();
+			//filename = _sceneDir + "saveMouseForce/";
+			//code = mkdir(filename.c_str());
+			//if (frame < 10)
+			//	filename += "mouse_000" + QString().setNum(frame).toStdString() + ".txt";
+			//else if (frame < 100)
+			//	filename += "mouse_00" + QString().setNum(frame).toStdString() + ".txt";
+			//else if (frame < 1000)
+			//	filename += "mouse_0" + QString().setNum(frame).toStdString() + ".txt";
+			//else
+			//	filename += "mouse_" + QString().setNum(frame).toStdString() + ".txt";
+			//fout.open(filename);
+			//fout << mousePointsIds.size() << std::endl;
+			//fout << mouseForceLine[0] << " " << mouseForceLine[1] <<" " << mouseForceLine[2] << std::endl;
+			//for (int i = 0; i < mousePointsIds.size(); i++)
+			//	fout << mousePointsIds[i] << " " << mousePointsList[i][0] << " " << mousePointsList[i][1] << " " << mousePointsList[i][2] << std::endl;
+			//fout.close();
 
 
 		}

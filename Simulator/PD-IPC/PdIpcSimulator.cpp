@@ -415,20 +415,20 @@ namespace PD_IPC
 
 	void PdIpcSimulator::gpuGeneralInit()
 	{
-		totalDimsBlockSize = dim3(THREADS_NUM);
-		totalDimsGridSize = dim3((totalDims + (THREADS_NUM - 1)) / THREADS_NUM);	
-		totalPointsBlockSize = dim3(THREADS_NUM);
-		totalPointsGridSize = dim3((simPointsNum + (THREADS_NUM - 1)) / THREADS_NUM);
-		simDimsBlockSize = dim3(THREADS_NUM);
-		simDimsGridSize = dim3((simDims + (THREADS_NUM - 1)) / THREADS_NUM);
-		simPointsBlockSize = dim3(THREADS_NUM);
-		simPointsGridSize = dim3((simPointsNum + (THREADS_NUM - 1)) / THREADS_NUM);
-		simElementsBlockSize = dim3(THREADS_NUM);
-		simElementsGridSize = dim3((simElementsNum + (THREADS_NUM - 1)) / THREADS_NUM);
-		simClothPointsBlockSize = dim3(THREADS_NUM);
-		simClothPointsGridSize = dim3((simClothPointsNum + (THREADS_NUM - 1)) / THREADS_NUM);
-		simPointsConstraintBlockSize = dim3(THREADS_NUM);
-		simPointsConstraintGridSize = dim3((positionConstraintNum + (THREADS_NUM - 1)) / THREADS_NUM);
+		totalDimsBlockSize = dim3(THREADS_NUM_128);
+		totalDimsGridSize = dim3((totalDims + (THREADS_NUM_128 - 1)) / THREADS_NUM_128);
+		totalPointsBlockSize = dim3(THREADS_NUM_128);
+		totalPointsGridSize = dim3((simPointsNum + (THREADS_NUM_128 - 1)) / THREADS_NUM_128);
+		simDimsBlockSize = dim3(THREADS_NUM_128);
+		simDimsGridSize = dim3((simDims + (THREADS_NUM_128 - 1)) / THREADS_NUM_128);
+		simPointsBlockSize = dim3(THREADS_NUM_128);
+		simPointsGridSize = dim3((simPointsNum + (THREADS_NUM_128 - 1)) / THREADS_NUM_128);
+		simElementsBlockSize = dim3(THREADS_NUM_128);
+		simElementsGridSize = dim3((simElementsNum + (THREADS_NUM_128 - 1)) / THREADS_NUM_128);
+		simClothPointsBlockSize = dim3(THREADS_NUM_128);
+		simClothPointsGridSize = dim3((simClothPointsNum + (THREADS_NUM_128 - 1)) / THREADS_NUM_128);
+		simPointsConstraintBlockSize = dim3(THREADS_NUM_128);
+		simPointsConstraintGridSize = dim3((positionConstraintNum + (THREADS_NUM_128 - 1)) / THREADS_NUM_128);
 
 
 		//int* devBoundaryFaces, *devBoundaryEdges;
@@ -1118,17 +1118,17 @@ namespace PD_IPC
 		CUDA_CALL(cudaMemcpy(devR3AlignedDimsSharedMemSize, &hostR3AlignedDimsSharedMemSize, sizeof(int), cudaMemcpyHostToDevice));
 
 		//////////////////////////////////////////
-		R1OperatorsBlockSize = THREADS_NUM;
-		R1OperatorsGridSize = (hostHessR1OperatorsNum + (THREADS_NUM - 1)) / THREADS_NUM;
+		R1OperatorsBlockSize = THREADS_NUM_128;
+		R1OperatorsGridSize = (hostHessR1OperatorsNum + (THREADS_NUM_128 - 1)) / THREADS_NUM_128;
 
 		R1IteraionBlockSize = THREADS_NUM_192;
 		R1IteraionGridSize = (simDims + (THREADS_NUM_192 - 1)) / THREADS_NUM_192;
 
 
-		R2OperatorsBlockSize = THREADS_NUM;
-		R2OperatorsGridSize = (hostHessR2OperatorsNum + (THREADS_NUM - 1)) / THREADS_NUM;
-		R2RowOperatorsBlockSize = THREADS_NUM;
-		R2RowOperatorsGridSize = (hostHessR2RowOperatorsTotal + (THREADS_NUM - 1)) / THREADS_NUM;
+		R2OperatorsBlockSize = THREADS_NUM_128;
+		R2OperatorsGridSize = (hostHessR2OperatorsNum + (THREADS_NUM_128 - 1)) / THREADS_NUM_128;
+		R2RowOperatorsBlockSize = THREADS_NUM_128;
+		R2RowOperatorsGridSize = (hostHessR2RowOperatorsTotal + (THREADS_NUM_128 - 1)) / THREADS_NUM_128;
 
 		R2FirstTermBlockSize = THREADS_NUM_192;
 		R2FirstTermGridSize = (simDims * R2_SPAN + (THREADS_NUM_192 - 1)) / THREADS_NUM_192;
@@ -1136,10 +1136,10 @@ namespace PD_IPC
 		R2IteraionBlockSize = THREADS_NUM_192;
 		R2IteraionGridSize = (simDims * R2_SPAN + (THREADS_NUM_192 - 1)) / THREADS_NUM_192;
 
-		R3OperatorsBlockSize = THREADS_NUM;
-		R3OperatorsGridSize = (hostHessR3OperatorsNum + (THREADS_NUM - 1)) / THREADS_NUM;
-		R3RowOperatorsBlockSize = THREADS_NUM;
-		R3RowOperatorsGridSize = (hostHessR3RowOperatorsTotal + (THREADS_NUM - 1)) / THREADS_NUM;
+		R3OperatorsBlockSize = THREADS_NUM_128;
+		R3OperatorsGridSize = (hostHessR3OperatorsNum + (THREADS_NUM_128 - 1)) / THREADS_NUM_128;
+		R3RowOperatorsBlockSize = THREADS_NUM_128;
+		R3RowOperatorsGridSize = (hostHessR3RowOperatorsTotal + (THREADS_NUM_128 - 1)) / THREADS_NUM_128;
 
 		R3FirstTermBlockSize = THREADS_NUM_192;
 		R3FirstTermGridSize = (simDims * R3_SPAN + (THREADS_NUM_192 - 1)) / THREADS_NUM_192;
@@ -1151,9 +1151,7 @@ namespace PD_IPC
 	void PdIpcSimulator::gpuCollisionInit()
 	{
 		enableAllEC = true;
-		qeal inflation_radius = dHat / 2;
-		cudaMalloc((void**)&devInflationRadius, sizeof(qeal));
-		cudaMemcpy(devInflationRadius, &inflation_radius, sizeof(qeal), cudaMemcpyHostToDevice);
+		qeal inflation_radius = 0.5 * dHat;
 		//m_patches
 		std::vector<std::vector<int>> facesSharedEdges(totalBoundaryFacesNum);
 		std::vector<std::vector<int>> facesSharedPoints(totalBoundaryFacesNum);
@@ -1320,7 +1318,7 @@ namespace PD_IPC
 		cudaMalloc((void**)&devPatchBboxes, sizeof(qeal) * 6 * hostPatchNum);
 		cudaMemcpy(devPatchBboxes, hostPatchBboxes.data(), sizeof(qeal) * 6 * hostPatchNum, cudaMemcpyHostToDevice);
 
-		m_patchBbox.resize(hostPatchNum);
+		m_patchBbox.resize(hostPatchNum); 
 		tbb::parallel_for(size_t(0), size_t(hostPatchNum), [&](size_t i)
 		{
 			int id = i;
@@ -1426,55 +1424,55 @@ namespace PD_IPC
 		std::vector<int> hostPotentialCcdSCPairsList;
 		for (int i = 0; i < hostPatchNum; i++)
 		{
-			std::vector<int>& faces = m_patchesFaces[i];
-			std::vector<int>& points = m_patchesPoints[i];
-			std::vector<int>& edges = m_patchesEdges[i];
-			continue; // remove
-			for (int j = 0; j < points.size(); j++)
-			{
-				int vid = points[j];
-				if (vid >= simPointsNum)
-					continue;
-				for (int k = 0; k < faces.size(); k++)
-				{
-					int fid = faces[k];
-					int f0 = boundaryFaces.col(fid)[0];
-					int f1 = boundaryFaces.col(fid)[1];
-					int f2 = boundaryFaces.col(fid)[2];
+			//std::vector<int>& faces = m_patchesFaces[i];
+			//std::vector<int>& points = m_patchesPoints[i];
+			//std::vector<int>& edges = m_patchesEdges[i];
+			//continue; // remove
+			//for (int j = 0; j < points.size(); j++)
+			//{
+			//	int vid = points[j];
+			//	if (vid >= simPointsNum)
+			//		continue;
+			//	for (int k = 0; k < faces.size(); k++)
+			//	{
+			//		int fid = faces[k];
+			//		int f0 = boundaryFaces.col(fid)[0];
+			//		int f1 = boundaryFaces.col(fid)[1];
+			//		int f2 = boundaryFaces.col(fid)[2];
 
-					if (vid == f0 || vid == f1 || vid == f2)
-						continue;
-					hostPotentialCcdSCPairsList.push_back(0);
-					hostPotentialCcdSCPairsList.push_back(vid);
-					hostPotentialCcdSCPairsList.push_back(f0);
-					hostPotentialCcdSCPairsList.push_back(f1);
-					hostPotentialCcdSCPairsList.push_back(f2);
-				}
-			}
+			//		if (vid == f0 || vid == f1 || vid == f2)
+			//			continue;
+			//		hostPotentialCcdSCPairsList.push_back(0);
+			//		hostPotentialCcdSCPairsList.push_back(vid);
+			//		hostPotentialCcdSCPairsList.push_back(f0);
+			//		hostPotentialCcdSCPairsList.push_back(f1);
+			//		hostPotentialCcdSCPairsList.push_back(f2);
+			//	}
+			//}
 
-			for (int j = 0; j < edges.size(); j++)
-			{
-				int eaId = edges[j];
-				int ea0 = boundaryEdges.col(eaId)[0];
-				int ea1 = boundaryEdges.col(eaId)[1];
-				if (ea0 >= simPointsNum)
-					continue;
-				for (int k = j + 1; k < edges.size(); k++)
-				{
-					int ebId = edges[k];
-					int eb0 = boundaryEdges.col(ebId)[0];
-					int eb1 = boundaryEdges.col(ebId)[1];
-					if (ea0 == eb0 || ea0 == eb1)
-						continue;
-					if (ea1 == eb0 || ea1 == eb1)
-						continue;
-					hostPotentialCcdSCPairsList.push_back(1);
-					hostPotentialCcdSCPairsList.push_back(ea0);
-					hostPotentialCcdSCPairsList.push_back(ea1);
-					hostPotentialCcdSCPairsList.push_back(eb0);
-					hostPotentialCcdSCPairsList.push_back(eb1);
-				}
-			}
+			//for (int j = 0; j < edges.size(); j++)
+			//{
+			//	int eaId = edges[j];
+			//	int ea0 = boundaryEdges.col(eaId)[0];
+			//	int ea1 = boundaryEdges.col(eaId)[1];
+			//	if (ea0 >= simPointsNum)
+			//		continue;
+			//	for (int k = j + 1; k < edges.size(); k++)
+			//	{
+			//		int ebId = edges[k];
+			//		int eb0 = boundaryEdges.col(ebId)[0];
+			//		int eb1 = boundaryEdges.col(ebId)[1];
+			//		if (ea0 == eb0 || ea0 == eb1)
+			//			continue;
+			//		if (ea1 == eb0 || ea1 == eb1)
+			//			continue;
+			//		hostPotentialCcdSCPairsList.push_back(1);
+			//		hostPotentialCcdSCPairsList.push_back(ea0);
+			//		hostPotentialCcdSCPairsList.push_back(ea1);
+			//		hostPotentialCcdSCPairsList.push_back(eb0);
+			//		hostPotentialCcdSCPairsList.push_back(eb1);
+			//	}
+			//}
 		}
 		hostPotentialCcdSCPairsNum = hostPotentialCcdSCPairsList.size() / 5;
 		CUDA_CALL(cudaMalloc((void**)&devPotentialCcdSCPairsNum, sizeof(int)));
@@ -1501,8 +1499,8 @@ namespace PD_IPC
 		updatePatchBboxBlockSize = hostPatchMaxThreads;
 		updatePatchBboxGridSize = hostPatchNum;
 
-		findPotentialCollisionsBlockSize = THREADS_NUM;
-		findPotentialCollisionsGridSize = ((hostPatchNum)+(THREADS_NUM - 1)) / THREADS_NUM;
+		findPotentialCollisionsBlockSize = THREADS_NUM_128;
+		findPotentialCollisionsGridSize = ((hostPatchNum)+(THREADS_NUM_128 - 1)) / THREADS_NUM_128;
 	}
 
 	void PdIpcSimulator::getSimPointsNeighborsList(std::vector<std::vector<int>>& simPointsNeighborsList)
@@ -1539,10 +1537,10 @@ namespace PD_IPC
 
 	void PdIpcSimulator::doTime(int frame)
 	{
-		if (frame == 280)
-		{		
-			cudaMemcpy(devGravityForce, devTempGravityForce, sizeof(qeal) * simDims, cudaMemcpyDeviceToDevice);
-		}
+		//if (frame == 280)
+		//{		
+		//	cudaMemcpy(devGravityForce, devTempGravityForce, sizeof(qeal) * simDims, cudaMemcpyDeviceToDevice);
+		//}
 		
 		subStep = 1;
 		qeal dt = _timeStep / subStep;
@@ -1591,12 +1589,12 @@ namespace PD_IPC
 
 		ConstraintEnergyInfo e0, e1;	
 		int lgIter = 0;
-		for (; lgIter < 15; lgIter++)
+		for (; lgIter < 10; lgIter++)
 		{
 			doLocalProjection(frame, dt, e0);
 			chebyshevJacobiR2SolverHost
 			(
-				20,
+				15,
 				blasHandle,
 				R2FirstTermBlockSize,
 				R2FirstTermGridSize,
@@ -1684,7 +1682,7 @@ namespace PD_IPC
 
 	void PdIpcSimulator::advance(const int frame, const qeal dt)
 	{
-		const int maxOutterIters = 40;
+		const int maxOutterIters = 30;
 		int outterIter = 0;
 		qeal toi = 1.0;
 		activeCollisionList = false;
@@ -1738,7 +1736,7 @@ namespace PD_IPC
 				devPoints,
 				devToiList
 			);
-	
+
 			clampDirectionHost
 			(
 				simDimsBlockSize,
@@ -1747,11 +1745,11 @@ namespace PD_IPC
 				devOldPoints,
 				devDirection,
 				devPoints,
-				devToiList
+				toi
 			);
 
 			cudaMemcpy(devCollisionDiagonal, devZeroVector, simPointsNum * sizeof(qeal), cudaMemcpyDeviceToDevice);
-			cudaMemcpy(devCollisionRhs, devZeroVector, simDims * sizeof(qeal), cudaMemcpyDeviceToDevice);
+			CUDA_CALL(cudaMemcpy(devCollisionRhs, devZeroVector, simDims * sizeof(qeal), cudaMemcpyDeviceToDevice));
 				
 			// test projective at the state of free collision
 			// remove tangent
@@ -1766,7 +1764,7 @@ namespace PD_IPC
 				devPoints,
 				devCollisionPointsMass,
 				devCollisionDiagonal,
-				devBarrier,
+				devCollisionRhs,
 				totalPointsNum
 			);
 
@@ -1774,9 +1772,9 @@ namespace PD_IPC
 
 			qeal residual;
 			cublasSdot(blasHandle, simDims, devDirection, 1, devDirection, 1, &residual);
+
 			if ((residual < 1e-5) && outterIter > 0)
 			{
-				std::cout << "-----" << std::endl;
 				break;
 			}
 			cudaMemcpy(devOldPoints, devPoints, sizeof(qeal) * simDims, cudaMemcpyDeviceToDevice);
@@ -1788,7 +1786,7 @@ namespace PD_IPC
 			simDimsBlockSize,
 			simDimsGridSize,
 			simDims,
-			0.995,
+			1. - dt,
 			dt,
 			devPoints,
 			devX0,
@@ -1801,7 +1799,6 @@ namespace PD_IPC
 	void PdIpcSimulator::gpuCcdCulling(qeal* devX, qeal* devDir)
 	{
 		hostPotentialCcdICPairsNum = 0;
-
 		updateCcdPatchBboxesHost
 		(
 			updatePatchBboxBlockSize,
@@ -1813,7 +1810,7 @@ namespace PD_IPC
 			devBoundaryFaces,
 			devX,
 			devDir,
-			devInflationRadius,
+			inflation_radius,
 			devFacesBboxes,
 			devPatchBboxes
 		);
@@ -1869,8 +1866,6 @@ namespace PD_IPC
 			devPotentialCcdICPairsNum,
 			devPotentialCcdICPairsList
 		);
-
-		hostPotentialCcdICPairsNum += hostPotentialCcdSCPairsNum;
 	}
 
 

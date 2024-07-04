@@ -54,7 +54,7 @@ namespace PD_IPC
 		qeal* devLastPoints,
 		qeal* devDirection,
 		qeal* devCurPoints,
-		qeal* devToi
+		const qeal toi
 	);
 
 	__host__ void updateVelocityHost
@@ -204,22 +204,7 @@ namespace PD_IPC
 		int* devFaces,
 		qeal* devX,
 		qeal* devDx,
-		qeal* devInflationRadius,
-		qeal* devFacesBboxes,
-		qeal* devPatchsBboxes
-	);
-
-	__host__ void updateDcdPatchBboxesHost
-	(
-		const dim3 blockDim,
-		const dim3 gridDim,
-		int* hostPatchMaxThreads, // must be 2^n and <= 1024
-		int* devPatchFacesList,
-		int* devPatchFacesNum,
-		int* devPatchFacesOffset,
-		int* devFaces,
-		qeal* devX,
-		qeal* devInflationRadius,
+		const qeal inflationRadius,
 		qeal* devFacesBboxes,
 		qeal* devPatchsBboxes
 	);

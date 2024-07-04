@@ -225,15 +225,9 @@ namespace PD_IPC
 		qeal* devLastPoints,
 		qeal* devDirection,
 		qeal* devCurPoints,
-		qeal* devToi
+		const qeal toi
 	)
 	{
-		__shared__ qeal toi;
-		if (threadIdx.x == 0)
-		{
-			toi = *devToi;
-		}
-		__syncthreads();
 		const int length = gridDim.x *  blockDim.x;
 		int tid = (blockIdx.x  * blockDim.x) + threadIdx.x;
 
@@ -251,7 +245,7 @@ namespace PD_IPC
 		qeal* devLastPoints,
 		qeal* devDirection,
 		qeal* devCurPoints,
-		qeal* devToi
+		const qeal toi
 	)
 	{
 		clampDirectionKernel << <gridSize, blockSize >> >
@@ -260,7 +254,7 @@ namespace PD_IPC
 				devLastPoints,
 				devDirection,
 				devCurPoints,
-				devToi
+				toi
 				);
 		cudaDeviceSynchronize();
 	}
@@ -645,10 +639,10 @@ __global__ void solveVolumetricStrainConstraintKernel
 		qeal* devRhs
 	)
 	{
-		__shared__ qeal sharedX[1536];
-		__shared__ qeal sharedNX[1536];
-		__shared__ qeal sharedTX[1536];
-		__shared__ qeal sharedAq[1536];
+		__shared__ qeal sharedX[384];
+		__shared__ qeal sharedNX[384];
+		__shared__ qeal sharedTX[384];
+		__shared__ qeal sharedAq[384];
 
 		int tid = blockDim.x * blockIdx.x + threadIdx.x;
 		int localIndex = 3 * threadIdx.x;
@@ -776,13 +770,15 @@ __global__ void solveVolumetricStrainConstraintKernel
 		qeal* devRhs
 	)
 	{
+		__shared__ qeal s_restPos[384];
+		
 		int tid = blockDim.x * blockIdx.x + threadIdx.x;
 		if (tid < pointsConstraintNum)
 		{
 			int vid = 3 * pointConstraintIndex[tid];
 			qeal stiffness = positionStiffness[tid];
 
-			qeal restPos[3];
+			qeal* restPos = s_restPos + 3 * threadIdx.x;
 			restPos[0] = stiffness * devRestPoints[vid];
 			restPos[1] = stiffness * devRestPoints[vid + 1];
 			restPos[2] = stiffness * devRestPoints[vid + 2];
@@ -953,7 +949,7 @@ __global__ void solveVolumetricStrainConstraintKernel
 		const qeal relex =2.0 / 3
 	)
 	{
-		__shared__ qeal val[THREADS_NUM];
+		__shared__ qeal val[THREADS_NUM_128];
 		int length = gridDim.x *  blockDim.x;
 		int tid = (blockIdx.x  * blockDim.x) + threadIdx.x;
 		int num;
@@ -1416,7 +1412,7 @@ __global__ void solveVolumetricStrainConstraintKernel
 		int* devFaces,
 		qeal* devX,
 		qeal* devDx,
-		qeal* devInflationRadius,
+		const qeal inflationRadius,
 		qeal* devFacesBboxes,
 		qeal* devPatchsBboxes
 	)
@@ -1424,12 +1420,10 @@ __global__ void solveVolumetricStrainConstraintKernel
 		extern __shared__ qeal bbox[];
 		__shared__ int facesNum;
 		__shared__ int offset;
-		__shared__ qeal inflation_radius;
 		if (threadIdx.x == 0)
 		{
 			facesNum = devPatchFacesNum[blockIdx.x];
 			offset = devPatchFacesOffset[blockIdx.x];
-			inflation_radius = *devInflationRadius;
 		}
 		__syncthreads();
 
@@ -1437,7 +1431,7 @@ __global__ void solveVolumetricStrainConstraintKernel
 		{
 			int address = offset + threadIdx.x;
 			int fid = devPatchFacesList[address];
-			getFaceBbox(fid, devX, devDx, devFaces, inflation_radius, bbox + 6 * threadIdx.x, bbox + 6 * threadIdx.x + 3);
+			getFaceBbox(fid, devX, devDx, devFaces, inflationRadius, bbox + 6 * threadIdx.x, bbox + 6 * threadIdx.x + 3);
 			devFacesBboxes[6 * address] = bbox[6 * threadIdx.x];
 			devFacesBboxes[6 * address + 1] = bbox[6 * threadIdx.x + 1];
 			devFacesBboxes[6 * address + 2] = bbox[6 * threadIdx.x + 2];
@@ -1489,7 +1483,7 @@ __global__ void solveVolumetricStrainConstraintKernel
 		int* devFaces,
 		qeal* devX,
 		qeal* devDx,
-		qeal* devInflationRadius,
+		const qeal inflationRadius,
 		qeal* devFacesBboxes,
 		qeal* devPatchsBboxes
 	)
@@ -1502,105 +1496,7 @@ __global__ void solveVolumetricStrainConstraintKernel
 				devFaces,
 				devX,
 				devDx,
-				devInflationRadius,
-				devFacesBboxes,
-				devPatchsBboxes
-				);
-		CUDA_CALL(cudaDeviceSynchronize());
-	}
-
-	__global__ void updateDcdPatchBboxesKernel
-	(
-		int* devPatchFacesList,
-		int* devPatchFacesNum,
-		int* devPatchFacesOffset,
-		int* devFaces,
-		qeal* devX,
-		qeal* devInflationRadius,
-		qeal* devFacesBboxes,
-		qeal* devPatchsBboxes
-	)
-	{
-		extern __shared__ qeal bbox[];
-		__shared__ int facesNum;
-		__shared__ int offset;
-		__shared__ qeal inflation_radius;
-		if (threadIdx.x == 0)
-		{
-			facesNum = devPatchFacesNum[blockIdx.x];
-			offset = devPatchFacesOffset[blockIdx.x];
-			inflation_radius = *devInflationRadius;
-		}
-		__syncthreads();
-
-		if (threadIdx.x < facesNum)
-		{
-			int address = offset + threadIdx.x;
-			int fid = devPatchFacesList[address];
-			getFaceBbox(fid, devX, devFaces, inflation_radius, bbox + 6 * threadIdx.x, bbox + 6 * threadIdx.x + 3);
-			devFacesBboxes[6 * address] = bbox[6 * threadIdx.x];
-			devFacesBboxes[6 * address + 1] = bbox[6 * threadIdx.x + 1];
-			devFacesBboxes[6 * address + 2] = bbox[6 * threadIdx.x + 2];
-
-			devFacesBboxes[6 * address + 3] = bbox[6 * threadIdx.x + 3];
-			devFacesBboxes[6 * address + 4] = bbox[6 * threadIdx.x + 4];
-			devFacesBboxes[6 * address + 5] = bbox[6 * threadIdx.x + 5];
-		}
-		else
-		{
-			bbox[6 * threadIdx.x] = QEAL_MAX;
-			bbox[6 * threadIdx.x + 1] = QEAL_MAX;
-			bbox[6 * threadIdx.x + 2] = QEAL_MAX;
-			bbox[6 * threadIdx.x + 3] = -QEAL_MAX;
-			bbox[6 * threadIdx.x + 4] = -QEAL_MAX;
-			bbox[6 * threadIdx.x + 5] = -QEAL_MAX;
-		}
-		__syncthreads();
-
-		for (int stride = blockDim.x / 2; stride > 0; stride >>= 1)
-		{
-			if (threadIdx.x < stride)
-			{
-				mergeBBox(bbox + 6 * threadIdx.x, bbox + 6 * threadIdx.x + 3, bbox + 6 * (threadIdx.x + stride), bbox + 6 * (threadIdx.x + stride) + 3);
-			}
-			__syncthreads();
-		}
-
-		if (threadIdx.x == 0)
-		{
-			devPatchsBboxes[6 * blockIdx.x] = bbox[6 * threadIdx.x];
-			devPatchsBboxes[6 * blockIdx.x + 1] = bbox[6 * threadIdx.x + 1];
-			devPatchsBboxes[6 * blockIdx.x + 2] = bbox[6 * threadIdx.x + 2];
-			devPatchsBboxes[6 * blockIdx.x + 3] = bbox[6 * threadIdx.x + 3];
-			devPatchsBboxes[6 * blockIdx.x + 4] = bbox[6 * threadIdx.x + 4];
-			devPatchsBboxes[6 * blockIdx.x + 5] = bbox[6 * threadIdx.x + 5];
-
-		}
-	}
-
-	__host__ void updateDcdPatchBboxesHost
-	(
-		const dim3 blockDim,
-		const dim3 gridDim,
-		int* hostPatchMaxThreads, // must be 2^n and <= 1024
-		int* devPatchFacesList,
-		int* devPatchFacesNum,
-		int* devPatchFacesOffset,
-		int* devFaces,
-		qeal* devX,
-		qeal* devInflationRadius,
-		qeal* devFacesBboxes,
-		qeal* devPatchsBboxes
-	)
-	{
-		updateDcdPatchBboxesKernel << <gridDim, blockDim, (*hostPatchMaxThreads) * 6 * sizeof(qeal) >> >
-			(
-				devPatchFacesList,
-				devPatchFacesNum,
-				devPatchFacesOffset,
-				devFaces,
-				devX,
-				devInflationRadius,
+				inflationRadius,
 				devFacesBboxes,
 				devPatchsBboxes
 				);
@@ -1676,7 +1572,7 @@ __global__ void solveVolumetricStrainConstraintKernel
 		qeal* devBvhsNodesBbox
 	)
 	{
-		dim3 blockSize(THREADS_NUM);
+		dim3 blockSize(THREADS_NUM_128);
 		dim3 gridSize(1);
 		updateBvhsBboxesKernel << <gridSize, blockSize >> >
 			(
@@ -1879,7 +1775,7 @@ __global__ void solveVolumetricStrainConstraintKernel
 	{
 		int* devEachPatchICPairsNumPtr = thrust::raw_pointer_cast(devEachPatchICPairsNum->data());
 		int* devEachPatchICPairsOffsetPtr = thrust::raw_pointer_cast(devEachPatchICPairsOffset->data());
-		findPatchsICPairsKernel << <gridSize, blockSize, THREADS_NUM * sizeof(int) >> >
+		findPatchsICPairsKernel << <gridSize, blockSize, THREADS_NUM_128 * sizeof(int) >> >
 			(
 				leafNodesNum,
 				bvhsNodesNum,
@@ -2075,8 +1971,8 @@ __global__ void solveVolumetricStrainConstraintKernel
 		{
 			if (hostPatchICPairsNum == 0)
 				return;
-			dim3 blockSize(THREADS_NUM);
-			int num_block = (hostPatchICPairsNum + (THREADS_NUM - 1)) / THREADS_NUM;
+			dim3 blockSize(THREADS_NUM_128);
+			int num_block = (hostPatchICPairsNum + (THREADS_NUM_128 - 1)) / THREADS_NUM_128;
 			dim3 gridSize(num_block);
 			int* devPatchICPairsVfeeNumListPtr = thrust::raw_pointer_cast(devPatchICPairsVfeeNumList->data());
 			int* devPatchICPairsVfeeOffsetListPtr = thrust::raw_pointer_cast(devPatchICPairsVfeeOffsetList->data());
@@ -2089,7 +1985,7 @@ __global__ void solveVolumetricStrainConstraintKernel
 					devPatchEdgesNum,
 					devPatchICPairsVfeeNumListPtr
 					);
-			cudaDeviceSynchronize();
+			CUDA_CALL(cudaDeviceSynchronize());
 			thrust::exclusive_scan(devPatchICPairsVfeeNumList->begin(), devPatchICPairsVfeeNumList->begin() + (hostPatchICPairsNum), devPatchICPairsVfeeOffsetList->begin());
 			(*hostPotentialCcdICPairsNum) = (*devPatchICPairsVfeeNumList)[hostPatchICPairsNum - 1] + (*devPatchICPairsVfeeOffsetList)[hostPatchICPairsNum - 1];
 			(*hostPotentialCcdICPairsNum) /= 5;
@@ -2118,7 +2014,7 @@ __global__ void solveVolumetricStrainConstraintKernel
 					devEdges,
 					devPotentialICcdCPairsList
 					);
-			cudaDeviceSynchronize();
+			CUDA_CALL(cudaDeviceSynchronize());
 		}
 
 	__global__ void computeDcdPatchICPairsF2FNumKernel
@@ -2873,6 +2769,8 @@ __global__ void solveVolumetricStrainConstraintKernel
 		)
 		{
 			__shared__ int length;
+			__shared__ qeal x[1536];
+
 			if (threadIdx.x == 0)
 			{
 				length = gridDim.x *  blockDim.x;
@@ -2893,7 +2791,10 @@ __global__ void solveVolumetricStrainConstraintKernel
 				int buffer2Id = 3 * t2Id;
 				int buffer3Id = 3 * t3Id;
 
-				qeal x0[3], x1[3], x2[3], x3[3];
+				qeal* x0 = x +12 * threadIdx.x;
+				qeal* x1 = x0 + 3;
+				qeal* x2 = x1 + 3;
+				qeal* x3 = x2 + 3;
 
 				x0[0] = devX[buffer0Id]; x1[0] = devX[buffer1Id]; x2[0] = devX[buffer2Id];  x3[0] = devX[buffer3Id];
 				x0[1] = devX[1 + buffer0Id]; x1[1] = devX[1 + buffer1Id]; x2[1] = devX[1 + buffer2Id];  x3[1] = devX[1 + buffer3Id];
@@ -3007,8 +2908,8 @@ __global__ void solveVolumetricStrainConstraintKernel
 		{
 			if (potentialCollisionPairsNum == 0)
 				return;
-			dim3 blockSize(THREADS_NUM);
-			int num_block = (potentialCollisionPairsNum + (THREADS_NUM - 1)) / THREADS_NUM;
+			dim3 blockSize(THREADS_NUM_128);
+			int num_block = (potentialCollisionPairsNum + (THREADS_NUM_128 - 1)) / THREADS_NUM_128;
 			dim3 gridSize(num_block);
 
 			setCollisionConstraintsKernel << <gridSize, blockSize >> >
@@ -3025,7 +2926,7 @@ __global__ void solveVolumetricStrainConstraintKernel
 					devCollisionRhs,
 					totalPointsNum
 					);
-			cudaDeviceSynchronize();
+			CUDA_CALL(cudaDeviceSynchronize());
 		}
 
 		///
